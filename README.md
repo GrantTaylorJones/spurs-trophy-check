@@ -1,5 +1,6 @@
 # spurs-trophy-check
-Static website to inform visitors of the time elapsed since Tottenham Hotspur FC have won silverware, as well as major events since then.
+Static website to inform visitors of the time elapsed since Tottenham Hotspur FC have last won silverware.
+Also includes major events that have taken place since then.
 
 Getting feet wet with html/css/JavaScript
 Currently utilizes Bootstrap.
