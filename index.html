@@ -4,28 +4,51 @@
     <head>
       <!-- Required meta tags -->
       <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"
+      <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
       <!-- Bootstrap CSS -->
       <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
+        <style>
+            * {
+                box-sizing: border-box;
+            }
+            .parent {
+                position: relative;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            .parent img {
+                vertical-align: middle;
+            }
+            .parent .text {
+                position: absolute;
+                bottom: 0;
+                background: rgb(0, 0, 0); /* Fallback color */
+                background: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+                color: #ffffff;
+                width: 100%;
+                padding: 20px;
+            }
+        </style>
 
+        
       <script>
             function daysPassed() {
               var EFL = "February 24, 2008";
               var millisecondsBetweenDOBAnd1970 = Date.parse(EFL);
               var millisecondsBetweenNowAnd1970 = Date.now();
               var ageInMilliseconds = millisecondsBetweenNowAnd1970-millisecondsBetweenDOBAnd1970;
-              //--We will leverage Date.parse and now method to calculate age in milliseconds refer here https://www.w3schools.com/jsref/jsref_parse.asp
+                //--We will leverage Date.parse and now method to calculate age in milliseconds refer here https://www.w3schools.com/jsref/jsref_parse.asp
 
-                var milliseconds = ageInMilliseconds;
-                var second = 1000;
-                var minute = second*60;
-                var hour = minute*60;
-                var day = hour*24;
-                var month = day*30;
+              var milliseconds = ageInMilliseconds;
+              var second = 1000;
+              var minute = second*60;
+              var hour = minute*60;
+              var day = hour*24;
+              var month = day*30;
               /*using 30 as base as months can have 28, 29, 30 or 31 days depending a month in a year it itself is a different piece of comuptation*/
-                var year = day*365;
+              var year = day*365;
 
               //let the age conversion begin
               var years = Math.round(milliseconds/year);
@@ -52,6 +75,9 @@
 
     <body onload="daysPassed()">
 
+    <div class="parent">
+        <img src="wenger.png" alt="Notebook" style="width:100%;">
+        <div class = "text">
       <h1>Days Since Tottenham Last Won a Tropy</h1>
       <br>
         <h1 id="days"></h1>
@@ -62,8 +88,8 @@
              Date: 24 February 2008 <br>
           </p>
           <p>Whats happened since : </p>
-
-
+    </div>
+    </div>
 
           <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
           <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
