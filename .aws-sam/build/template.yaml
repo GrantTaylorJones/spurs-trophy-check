@@ -1,0 +1,104 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'Serverless website
+
+  '
+Parameters:
+  S3StaticWebsiteBucketNameParameter:
+    Type: String
+    Default: dayssincetottenhamlastwonatrophy.com
+    Description: The bucket name for the static web content
+  DomainNameParameter:
+    Type: String
+    Default: dayssincetottenhamlastwonatrophy.com
+    Description: The domain name for the website, this needs to be registered prior
+  HostedZoneNameParameter:
+    Type: String
+    Default: dayssincetottenhamlastwonatrophy.com.
+    Description: The name of the hosted zone, this was created when you registered
+      the domain name
+Resources:
+  CloudFrontOriginAccessIdentity:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Serverless website OA
+  AcmCertificate:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName:
+        Ref: DomainNameParameter
+      ValidationMethod: DNS
+  CloudfrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        ViewerCertificate:
+          AcmCertificateArn:
+            Ref: AcmCertificate
+          MinimumProtocolVersion: TLSv1.2_2018
+          SslSupportMethod: sni-only
+        Comment: Cloudfront distribution for serverless website
+        DefaultRootObject: index.html
+        CustomErrorResponses:
+        - ResponsePagePath: /index.html
+          ResponseCode: 200
+          ErrorCode: 403
+        Enabled: true
+        HttpVersion: http2
+        Aliases:
+        - Ref: DomainNameParameter
+        Origins:
+        - Id: s3-website
+          DomainName:
+            Fn::GetAtt:
+            - S3Bucket
+            - DomainName
+          S3OriginConfig:
+            OriginAccessIdentity:
+              Fn::Sub: origin-access-identity/cloudfront/${CloudFrontOriginAccessIdentity}
+        DefaultCacheBehavior:
+          Compress: 'true'
+          AllowedMethods:
+          - GET
+          - HEAD
+          - OPTIONS
+          ForwardedValues:
+            QueryString: false
+          TargetOriginId: s3-website
+          ViewerProtocolPolicy: redirect-to-https
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName:
+        Ref: S3StaticWebsiteBucketNameParameter
+  S3BucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:
+        Ref: S3Bucket
+      PolicyDocument:
+        Statement:
+        - Effect: Allow
+          Action: s3:GetObject
+          Resource:
+          - Fn::Sub: arn:aws:s3:::${S3Bucket}/*
+          Principal:
+            AWS:
+              Fn::Sub: arn:aws:iam::cloudfront:user/CloudFront Origin Access Identity
+                ${CloudFrontOriginAccessIdentity}
+  Route53RecordSet:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      AliasTarget:
+        DNSName:
+          Fn::GetAtt:
+          - CloudfrontDistribution
+          - DomainName
+        EvaluateTargetHealth: false
+        HostedZoneId: Z2FDTNDATAQYW2
+      HostedZoneName:
+        Ref: HostedZoneNameParameter
+      Name:
+        Ref: DomainNameParameter
+      Type: A
