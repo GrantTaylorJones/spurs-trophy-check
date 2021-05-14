@@ -1,0 +1,8 @@
+.idea### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### macOS-Specific Files ###
+.DS_Store
